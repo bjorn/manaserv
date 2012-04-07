@@ -93,8 +93,8 @@ static void initialize()
     signal(SIGINT, closeGracefully);
     signal(SIGTERM, closeGracefully);
 
-    std::string logFile = Configuration::getValue("log_accountServerFile",
-                                                  DEFAULT_LOG_FILE);
+    std::string logFile = Configuration::getPathValue("log_accountServerFile",
+                                                      DEFAULT_LOG_FILE);
 
     // Initialize PhysicsFS
     PHYSFS_init("");
@@ -102,8 +102,8 @@ static void initialize()
     Logger::initialize(logFile);
 
     // Indicate in which file the statistics are put.
-    statisticsFile = Configuration::getValue("log_statisticsFile",
-                                             DEFAULT_STATS_FILE);
+    statisticsFile = Configuration::getPathValue("log_statisticsFile",
+                                                 DEFAULT_STATS_FILE);
 
     LOG_INFO("Using statistics file: " << statisticsFile);
 

@@ -117,8 +117,8 @@ static void initializeServer()
     signal(SIGINT, closeGracefully);
     signal(SIGTERM, closeGracefully);
 
-    std::string logFile = Configuration::getValue("log_gameServerFile",
-                                                  DEFAULT_LOG_FILE);
+    std::string logFile = Configuration::getPathValue("log_gameServerFile",
+                                                      DEFAULT_LOG_FILE);
 
     // Initialize PhysicsFS
     PHYSFS_init("");

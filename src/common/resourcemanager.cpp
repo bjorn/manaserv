@@ -43,9 +43,9 @@ void ResourceManager::initialize()
     PHYSFS_permitSymbolicLinks(1);
 
     const std::string serverPath =
-            Configuration::getValue("serverPath", ".");
+            Configuration::getPathValue("serverPath", ".");
     const std::string worldDataPath =
-            Configuration::getValue("worldDataPath", "example");
+            Configuration::getPathValue("worldDataPath", "example");
 
     PHYSFS_addToSearchPath(serverPath.c_str(), 1);
     PHYSFS_addToSearchPath(worldDataPath.c_str(), 1);

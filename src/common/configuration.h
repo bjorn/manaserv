@@ -57,6 +57,19 @@ namespace Configuration
      * @param deflt default value.
      */
     bool getBoolValue(const std::string &key, bool deflt);
+
+    /**
+     * Gets an option as a path. When the path is relative, the path of the
+     * configuration file will be prepended to it.
+     *
+     * \warning Relative paths in included configuration files will be
+     * resolved against the location of the main configuration file.
+     *
+     * @param key option identifier.
+     * @param deflt default value.
+     */
+    std::string getPathValue(const std::string &key,
+                             const std::string &deflt);
 }
 
 #ifndef DEFAULT_SERVER_PORT

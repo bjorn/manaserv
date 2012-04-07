@@ -78,8 +78,9 @@ DbBackends SqLiteDataProvider::getDbBackend() const
 void SqLiteDataProvider::connect()
 {
     // get configuration parameter for sqlite
-    const std::string dbName
-        = Configuration::getValue(CFGPARAM_SQLITE_DB, CFGPARAM_SQLITE_DB_DEF);
+    const std::string dbName =
+            Configuration::getPathValue(CFGPARAM_SQLITE_DB,
+                                        CFGPARAM_SQLITE_DB_DEF);
 
     LOG_INFO("Trying to connect with SQLite database file '"
         << dbName << "'");

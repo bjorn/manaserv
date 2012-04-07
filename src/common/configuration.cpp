@@ -38,6 +38,19 @@ static std::map< std::string, std::string > options;
 static std::string configPath;
 static std::set<std::string> processedFiles;
 
+static bool isAbsolutePath(const std::string &path)
+{
+    return !path.empty() && path.at(0) == '/';
+}
+
+static std::string getPath(const std::string &path)
+{
+    size_t lastSlash = path.rfind('/');
+    if (lastSlash != std::string::npos)
+        return path.substr(0, lastSlash + 1);
+    return std::string();
+}
+
 static bool readFile(const std::string &fileName)
 {
     if (processedFiles.find(fileName) != processedFiles.end())
@@ -52,7 +65,8 @@ static bool readFile(const std::string &fileName)
     XML::Document doc(fileName, false);
     xmlNodePtr node = doc.rootNode();
 
-    if (!node || !xmlStrEqual(node->name, BAD_CAST "configuration")) {
+    if (!node || !xmlStrEqual(node->name, BAD_CAST "configuration"))
+    {
         LOG_WARN("No configuration file '" << fileName.c_str() << "'.");
         return false;
     }
@@ -62,6 +76,9 @@ static bool readFile(const std::string &fileName)
         if (xmlStrEqual(node->name, BAD_CAST "include"))
         {
             std::string file = XML::getProperty(node, "file", std::string());
+            if (!isAbsolutePath(file))
+                file = getPath(fileName) + file;
+
             if (!readFile(file))
             {
                 LOG_WARN("Error ocurred while parsing included " <<
@@ -126,4 +143,13 @@ bool Configuration::getBoolValue(const std::string &key, bool deflt)
     if (iter == options.end())
         return deflt;
     return utils::stringToBool(iter->second.c_str(), deflt);
+}
+
+std::string Configuration::getPathValue(const std::string &key,
+                                        const std::string &deflt)
+{
+    std::string str = getValue(key, deflt);
+    if (!isAbsolutePath(str))
+        return getPath(configPath) + str;
+    return str;
 }
